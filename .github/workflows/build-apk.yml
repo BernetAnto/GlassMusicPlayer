@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Setup Java
@@ -25,14 +25,23 @@ jobs:
         with:
           channel: stable
 
+      - name: Check Project
+        run: ls -la
+
+      - name: Generate Android Files
+        working-directory: GlassMusicPlayer
+        run: flutter create --platforms=android --project-name glass_music_player .
+
       - name: Get Dependencies
+        working-directory: GlassMusicPlayer
         run: flutter pub get
 
       - name: Build APK
-        run: flutter build apk --debug
+        working-directory: GlassMusicPlayer
+        run: flutter build apk --release
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: GlassMusicPlayer-APK
-          path: build/app/outputs/flutter-apk/app-debug.apk
+          path: GlassMusicPlayer/build/app/outputs/flutter-apk/app-release.apk
