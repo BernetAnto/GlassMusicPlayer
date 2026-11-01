@@ -25,16 +25,17 @@ jobs:
         with:
           channel: stable
 
-      - name: Check Project Files
-        run: ls -la
-
-      - name: Generate Android Files
+      - name: Generate Android Project
         run: flutter create --platforms=android --project-name glass_music_player .
 
-      - name: Get Dependencies
+      - name: Add Internet Permission
+        run: |
+          sed -i '/<application/i\    <uses-permission android:name="android.permission.INTERNET"/>' android/app/src/main/AndroidManifest.xml
+
+      - name: Install Dependencies
         run: flutter pub get
 
-      - name: Build APK
+      - name: Build Release APK
         run: flutter build apk --release
 
       - name: Upload APK
